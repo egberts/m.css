@@ -1,3 +1,5 @@
+
+<!-- article_header.html begins -->
 <header>
   <h1><a href="{{ article.url|format_siteurl|e }}" rel="bookmark" title="Permalink to {{ article.title }}">
     <time class="m-date" datetime="{{ article.date.isoformat() }}">
@@ -30,3 +32,4 @@
   {{ article.summary|trim|indent(2) }}
   {% endif %}
 </header>
+<!-- article_header.html ends -->

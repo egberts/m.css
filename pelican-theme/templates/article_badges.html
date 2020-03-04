@@ -1,3 +1,4 @@
+<!-- article_badges.html -->
 {% if article.author and article.author.badge %}
 <div class="m-block m-success{% if article.author.image %} m-badge{% endif %}">
   {% if article.author.image %}
@@ -16,3 +17,4 @@
   {{ article.category.badge|expand_links(article)|rtrim|indent(2) }}
 </div>
 {% endif %}
+<!-- article_badges.html -->

@@ -1,3 +1,4 @@
+<!-- pagination.html begins -->
 {% if DEFAULT_PAGINATION %}
 <div class="m-article-pagination">
   {%- if articles_page.has_previous() %}<a href="{{ articles_previous_page.url|format_siteurl|e }}">&laquo; newer articles</a> | {% endif -%}
@@ -5,3 +6,4 @@
   {%- if articles_page.has_next() %} | <a href="{{ articles_next_page.url|format_siteurl|e }}">older articles &raquo;</a>{% endif -%}
 </div>
 {% endif %}
+<!-- pagination.html ends -->

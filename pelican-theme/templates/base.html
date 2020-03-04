@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- base.html begins -->
 <html lang="{% if page and page.lang %}{{ page.lang }}{% elif article and article.lang %}{{ article.lang }}{% else %}{{ DEFAULT_LANG }}{%endif %}"{% if not M_DISABLE_SOCIAL_META_TAGS %} prefix="og: http://ogp.me/ns#"{% endif %}>
 <head>
   <meta charset="UTF-8" />
@@ -183,3 +184,4 @@
 {% endif %}
 </body>
 </html>
+<!-- base.html ends -->
