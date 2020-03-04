@@ -340,13 +340,13 @@ body { margin: 0; }
 
 html {
   font-size: 16px;
-  background-color: #2f363f;
+  background-color: #000000;
 }
 body {
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 1rem;
   line-height: normal;
-  color: #dcdcdc;
+  color: #ccffcc;
 }
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
@@ -368,7 +368,7 @@ ul ol, ul ul, ol ol, ol ul {
   margin-bottom: 0;
 }
 main p {
-  text-indent: 1.5rem;
+  text-indent: 0;
   text-align: justify;
 }
 main p.m-noindent, li > p, dd > p, table.m-table td > p {
@@ -389,7 +389,7 @@ hr {
   border-style: solid;
 }
 blockquote, hr {
-  border-color: #405363;
+  border-color: #4dff4d;
 }
 strong, .m-text.m-strong { font-weight: bold; }
 em, .m-text.m-em { font-style: italic; }
@@ -407,29 +407,30 @@ abbr {
   text-decoration: underline dotted;
 }
 a {
-  color: #5b9dd9;
+  color: #66ff66;
 }
 a.m-flat {
   text-decoration: none;
 }
 a:hover, a:focus, a:active {
-  color: #a5c9ea;
+  color: #99ff99;
 }
 a img { border: 0; }
 svg a { cursor: pointer; }
 mark {
   padding: 0.0625rem;
-  background-color: #c7cf2f;
-  color: #2f83cc;
+  background-color: #ccffcc;
+  color: #33ff33;
 }
 pre, code {
   font-family: 'Source Code Pro', monospace, monospace, monospace;
   font-size: 0.9em;
-  color: #e6e6e6;
-  background-color: #282e36;
+  color: #e6ffe6;
+  background-color: #004d00;
+  border-radius: 0.2rem;
 }
 pre.m-console, code.m-console {
-  color: #e6e6e6;
+  color: #e6ffe6;
   background-color: #1a1c1d;
 }
 pre {
@@ -444,6 +445,7 @@ pre.m-console-wrap {
 }
 code {
   padding: 0.125rem;
+  border-radius: 0.3rem;
 }
 *:focus { outline-color: #5b9dd9; }
 div.m-scroll {
@@ -526,7 +528,7 @@ p.m-poem {
   margin-left: 1.5rem;
 }
 p.m-transition {
-  color: #405363;
+  color: #4dff4d;
   text-indent: 0;
   text-align: center;
   font-size: 2rem;
@@ -581,11 +583,11 @@ dl.m-footnote dd span.m-footnote a {
   padding: 1rem;
 }
 .m-frame {
-  background-color: #2f363f;
+  background-color: #000000;
   border-style: solid;
   border-width: 0.125rem;
   border-radius: 0.2rem;
-  border-color: #405363;
+  border-color: #4dff4d;
   padding: 0.875rem;
 }
 .m-block {
@@ -593,7 +595,7 @@ dl.m-footnote dd span.m-footnote a {
   border-width: 0.0625rem;
   border-left-width: 0.25rem;
   border-radius: 0.2rem;
-  border-color: #405363;
+  border-color: #4dff4d;
   padding: 0.9375rem 0.9375rem 0.9375rem 0.75rem;
 }
 .m-block.m-badge::after {
@@ -664,7 +666,7 @@ div.m-scroll > table.m-table:last-child {
   margin-bottom: 0.0625rem;
 }
 table.m-table:not(.m-flat) tbody tr:hover {
-  background-color: #405363;
+  background-color: #4dff4d;
 }
 table.m-table th, table.m-table td {
   vertical-align: top;
@@ -673,7 +675,7 @@ table.m-table th, table.m-table td {
   border-left-width: 0;
   border-right-width: 0;
   border-bottom-width: 0;
-  border-color: #405363;
+  border-color: #4dff4d;
 }
 table.m-table caption {
   padding-bottom: 0.5rem;
@@ -736,7 +738,7 @@ table.m-table tr.m-info td, table.m-table td.m-info,
 table.m-table tr.m-info th, table.m-table th.m-info,
 table.m-table tr.m-dim td, table.m-table td.m-dim,
 table.m-table tr.m-dim th, table.m-table th.m-dim {
-  border-color: #2f363f;
+  border-color: #000000;
 }
 .m-note pre, .m-note code,
 table.m-table tr.m-default pre, table.m-table tr.m-default code,
@@ -799,7 +801,7 @@ figure.m-figure:before {
   border-style: solid;
   border-width: 0.125rem;
   border-radius: 0.2rem;
-  border-color: #405363;
+  border-color: #4dff4d;
 }
 figure.m-figure.m-flat:before {
   border-color: transparent;
@@ -868,7 +870,7 @@ figure.m-figure.m-fullwidth:after {
   border-radius: 0.2rem;
 }
 .m-code-figure:before {
-  border-color: #282e36;
+  border-color: #004d00;
 }
 .m-console-figure:before {
   border-color: #1a1c1d;
@@ -896,7 +898,7 @@ figure.m-figure figcaption, .m-code-figure figcaption, .m-console-figure figcapt
   font-size: 1.17rem;
 }
 .m-imagegrid > div {
-  background-color: #2f363f;
+  background-color: #000000;
 }
 .m-imagegrid > div > figure {
   display: block;
@@ -913,7 +915,7 @@ figure.m-figure figcaption, .m-code-figure figcaption, .m-console-figure figcapt
   left: 0;
   width: 100%;
   height: 100%;
-  border-color: #2f363f;
+  border-color: #000000;
   border-style: solid;
   border-width: 0.25rem;
   padding: 0.5rem;
@@ -1148,8 +1150,8 @@ pre.m-code span.hll {
 }
 .m-code.m-inverted { color: rgba(230, 230, 230, 0.33); }
 .m-console.m-inverted { color: rgba(230, 230, 230, 0.33); }
-.m-code.m-inverted > span.hll { color: #e6e6e6; }
-.m-cosole.m-inverted > span.hll { color: #e6e6e6; }
+.m-code.m-inverted > span.hll { color: #e6ffe6; }
+.m-cosole.m-inverted > span.hll { color: #e6ffe6; }
 .m-code-color {
   display: inline-block;
   width: 0.75rem;
@@ -1169,10 +1171,10 @@ div.m-math svg {
   display: block;
 }
 div.m-button a svg.m-math { fill: #22272e; }
-div.m-button.m-flat a svg.m-math { fill: #dcdcdc; }
+div.m-button.m-flat a svg.m-math { fill: #ccffcc; }
 div.m-button.m-flat a:hover svg.m-math, div.m-button.m-default a:focus svg.m-math,
 div.m-button.m-default a:active svg.m-math {
-  fill: #a5c9ea;
+  fill: #99ff99;
 }
 .m-graph { font-size: 16px; }
 div.m-plot svg, div.m-graph svg {
@@ -1184,9 +1186,9 @@ div.m-plot svg, div.m-graph svg {
 div.m-plot .m-background { fill: #34424d; }
 div.m-plot svg .m-label { font-size: 11px; }
 div.m-plot svg .m-title { font-size: 13px; }
-div.m-plot svg .m-label, div.m-plot svg .m-title { fill: #dcdcdc; }
+div.m-plot svg .m-label, div.m-plot svg .m-title { fill: #ccffcc; }
 div.m-plot svg .m-line {
-  stroke: #dcdcdc;
+  stroke: #ccffcc;
   stroke-width: 0.8;
 }
 div.m-plot svg .m-error {
@@ -1208,15 +1210,15 @@ figure.m-figure > svg.m-graph:first-child {
 }
 figure.m-figure:not(.m-flat) > svg.m-math:first-child,
 figure.m-figure:not(.m-flat) > svg.m-graph:first-child {
-  background-color: #405363;
+  background-color: #4dff4d;
 }
-.m-block.m-default { border-left-color: #405363; }
+.m-block.m-default { border-left-color: #4dff4d; }
 .m-block.m-default h3, .m-block.m-default h4, .m-block.m-default h5, .m-block.m-default h6,
 .m-text.m-default, .m-label.m-flat.m-default {
   color: #dcdcdc;
 }
 .m-block.m-default h3 a, .m-block.m-default h4 a, .m-block.m-default h5 a, .m-block.m-default h6 a {
-  color: #5b9dd9;
+  color: #66ff66;
 }
 .m-block.m-primary { border-left-color: #a5c9ea; }
 .m-block.m-primary h3, .m-block.m-primary h4, .m-block.m-primary h5, .m-block.m-primary h6,
@@ -1298,9 +1300,9 @@ figure.m-figure:not(.m-flat) > svg.m-graph:first-child {
   color: #5297d7;
 }
 div.m-button a, .m-label { color: #22272e; }
-div.m-button.m-flat a { color: #dcdcdc; }
+div.m-button.m-flat a { color: #ccffcc; }
 div.m-button.m-flat a:hover, div.m-button.m-default a:focus, div.m-button.m-default a:active {
-  color: #a5c9ea;
+  color: #99ff99;
 }
 div.m-button.m-default a, .m-label:not(.m-flat).m-default { background-color: #dcdcdc; }
 div.m-button.m-primary a, .m-label:not(.m-flat).m-primary { background-color: #a5c9ea; }
@@ -1500,7 +1502,7 @@ figure.m-figure.m-dim a { color: #acacac; }
 figure.m-figure.m-dim a:hover, figure.m-figure.m-dim a:focus, figure.m-figure.m-dim a:active {
   color: #747474;
 }
-.m-math { fill: #dcdcdc; }
+.m-math { fill: #ccffcc; }
 .m-math.m-default, .m-math g.m-default, .m-math rect.m-default,
 div.m-plot svg .m-bar.m-default,
 .m-graph g.m-edge polygon,
@@ -2114,7 +2116,7 @@ article#m-jumbo {
   margin-top: -1rem;
 }
 #m-landing-cover, #m-cover-image > div, article#m-jumbo > header #m-jumbo-cover {
-  background: linear-gradient(transparent 0%, transparent 50%, #2f363f 100%);
+  background: linear-gradient(transparent 0%, transparent 50%, #000000 100%);
   width: 100%;
   height: 100%;
 }
@@ -2159,7 +2161,7 @@ article#m-jumbo.m-inverted > header a:hover, article#m-jumbo.m-inverted > header
   color: #0f0f0f;
 }
 .m-landing-news h3 a {
-  color: #dcdcdc;
+  color: #ccffcc;
   text-decoration: none;
   text-transform: uppercase;
 }
@@ -2418,12 +2420,12 @@ article:last-child, article section:last-child { margin-bottom: 0; }
 .m-container-inflatable section:target [class*='m-right-'] > figure.m-console-figure::before,
 .m-container-inflatable section:target .m-container-inflatable > figure.m-code-figure::before,
 .m-container-inflatable section:target .m-container-inflatable > figure.m-console-figure::before {
-  border-left-color: #405363;
+  border-left-color: #4dff4d;
 }
 @media screen and (min-width: 576px) {
   .m-container-inflatable section:target .m-center-s > figure.m-code-figure::before,
   .m-container-inflatable section:target .m-right-s > figure.m-code-figure::before {
-    border-color: #282e36;
+    border-color: #004d00;
   }
   .m-container-inflatable section:target .m-center-s > figure.m-console-figure::before,
   .m-container-inflatable section:target .m-right-s > figure.m-console-figure::before {
@@ -2433,7 +2435,7 @@ article:last-child, article section:last-child { margin-bottom: 0; }
 @media screen and (min-width: 768px) {
   .m-container-inflatable section:target .m-center-m > figure.m-code-figure::before,
   .m-container-inflatable section:target .m-right-m > figure.m-code-figure::before {
-    border-color: #282e36;
+    border-color: #004d00;
   }
   .m-container-inflatable section:target .m-center-m > figure.m-console-figure::before,
   .m-container-inflatable section:target .m-right-m > figure.m-console-figure::before {
@@ -2443,7 +2445,7 @@ article:last-child, article section:last-child { margin-bottom: 0; }
 @media screen and (min-width: 992px) {
   .m-container-inflatable section:target .m-center-l > figure.m-code-figure::before,
   .m-container-inflatable section:target .m-right-l > figure.m-code-figure::before {
-    border-color: #282e36;
+    border-color: #004d00;
   }
   .m-container-inflatable section:target .m-center-l > figure.m-console-figure::before,
   .m-container-inflatable section:target .m-right-l > figure.m-console-figure::before {
@@ -2453,10 +2455,10 @@ article:last-child, article section:last-child { margin-bottom: 0; }
 .m-container-inflatable section:target pre,
 .m-container-inflatable section:target figure.m-code-figure > pre:first-child,
 .m-container-inflatable section:target figure.m-console-figure > pre:first-child {
-  border-color: #405363;
+  border-color: #4dff4d;
 }
 .m-container-inflatable section:target .m-note.m-default {
-  border-color: #405363;
+  border-color: #4dff4d;
 }
 .m-container-inflatable section:target .m-note.m-primary  {
   border-color: #a5c9ea;

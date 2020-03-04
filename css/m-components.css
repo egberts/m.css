@@ -55,7 +55,8 @@ ul ol, ul ul, ol ol, ol ul {
   margin-bottom: 0;
 }
 main p {
-  text-indent: var(--paragraph-indent);
+  text-indent: 0;
+  /* text-indent: var(--paragraph-indent); */
   text-align: var(--paragraph-align);
 }
 /* Remove indentation and justification where it doesn't make sense */
@@ -120,6 +121,7 @@ pre, code {
   font-size: var(--code-font-size);
   color: var(--code-color);
   background-color: var(--code-background-color);
+  border-radius: var(--border-radius);
 }
 pre.m-console, code.m-console {
   color: var(--console-color);
@@ -137,6 +139,7 @@ pre.m-console-wrap {
 }
 code {
   padding: 0.125rem;
+  border-radius: 0.3rem;
 }
 
 /* Focus outline on link, canvas and input: match the focused header item. */
