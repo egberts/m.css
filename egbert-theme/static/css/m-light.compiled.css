@@ -1928,8 +1928,8 @@ body > header > nav:target #m-navbar-hide {
   }
   body > header > nav a, body > header > nav #m-navbar-collapse li a {
     margin-left: 0;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
     white-space: nowrap;
   }
   body > header > nav #m-navbar-collapse {
@@ -2199,11 +2199,16 @@ nav.m-navpanel a:hover, nav.m-navpanel a:focus, nav.m-navpanel a:active {
   color: #cb4b16;
 }
 ul.m-tagcloud li { display: inline; }
-ul.m-tagcloud li.m-tag-1 { font-size: 0.75rem; }
-ul.m-tagcloud li.m-tag-2 { font-size: 0.825rem; }
-ul.m-tagcloud li.m-tag-3 { font-size: 1rem; }
+ul.m-tagcloud li.m-tag-1 { font-size: 2.0rem; }
+ul.m-tagcloud li.m-tag-2 { font-size: 1.7rem; }
+ul.m-tagcloud li.m-tag-3 { font-size: 1.5rem; }
 ul.m-tagcloud li.m-tag-4 { font-size: 1.25rem; }
-ul.m-tagcloud li.m-tag-5 { font-size: 1.5rem; }
+ul.m-tagcloud li.m-tag-5 { font-size: 1.0rem; }
+ul.m-tagcloud li.m-tag-6 { font-size: 0.9rem; }
+ul.m-tagcloud li.m-tag-7 { font-size: 0.8rem; }
+ul.m-tagcloud li.m-tag-8 { font-size: 0.7rem; }
+ul.m-tagcloud li.m-tag-9 { font-size: 0.6rem; }
+ul.m-tagcloud li.m-tag-10 { font-size: 0.50rem; }
 article section:target figure.m-code-figure, article section:target figure.m-console-figure {
   z-index: 1;
 }

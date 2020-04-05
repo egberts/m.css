@@ -1928,8 +1928,8 @@ body > header > nav:target #m-navbar-hide {
   }
   body > header > nav a, body > header > nav #m-navbar-collapse li a {
     margin-left: 0;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
     white-space: nowrap;
   }
   body > header > nav #m-navbar-collapse {
@@ -2199,11 +2199,16 @@ nav.m-navpanel a:hover, nav.m-navpanel a:focus, nav.m-navpanel a:active {
   color: #a5c9eb;
 }
 ul.m-tagcloud li { display: inline; }
-ul.m-tagcloud li.m-tag-1 { font-size: 0.75rem; }
-ul.m-tagcloud li.m-tag-2 { font-size: 0.825rem; }
-ul.m-tagcloud li.m-tag-3 { font-size: 1rem; }
+ul.m-tagcloud li.m-tag-1 { font-size: 2.0rem; }
+ul.m-tagcloud li.m-tag-2 { font-size: 1.7rem; }
+ul.m-tagcloud li.m-tag-3 { font-size: 1.5rem; }
 ul.m-tagcloud li.m-tag-4 { font-size: 1.25rem; }
-ul.m-tagcloud li.m-tag-5 { font-size: 1.5rem; }
+ul.m-tagcloud li.m-tag-5 { font-size: 1.0rem; }
+ul.m-tagcloud li.m-tag-6 { font-size: 0.9rem; }
+ul.m-tagcloud li.m-tag-7 { font-size: 0.8rem; }
+ul.m-tagcloud li.m-tag-8 { font-size: 0.7rem; }
+ul.m-tagcloud li.m-tag-9 { font-size: 0.6rem; }
+ul.m-tagcloud li.m-tag-10 { font-size: 0.50rem; }
 article section:target figure.m-code-figure, article section:target figure.m-console-figure {
   z-index: 1;
 }
@@ -2479,72 +2484,77 @@ article:last-child, article section:last-child { margin-bottom: 0; }
   border-color: #747474;
 }
 
-.m-code .hll { background-color: #34424d }
-.m-code .c { color: #a5c9ea }
-.m-code .k { color: #ffffff; font-weight: bold }
-.m-code .n { color: #dcdcdc }
-.m-code .o { color: #aaaaaa }
-.m-code .p { color: #aaaaaa }
-.m-code .ch { color: #a5c9ea }
-.m-code .cm { color: #a5c9ea }
-.m-code .cp { color: #3bd267 }
-.m-code .cpf { color: #c7cf2f }
-.m-code .c1 { color: #a5c9ea }
-.m-code .cs { color: #a5c9ea }
-.m-code .gd { color: #cd3431 }
-.m-code .ge { color: #e6e6e6; font-style: italic }
-.m-code .gh { color: #ffffff; font-weight: bold }
-.m-code .gi { color: #3bd267 }
-.m-code .gs { color: #e6e6e6; font-weight: bold }
-.m-code .gu { color: #5b9dd9 }
-.m-code .kc { color: #ffffff; font-weight: bold }
-.m-code .kd { color: #ffffff; font-weight: bold }
-.m-code .kn { color: #ffffff; font-weight: bold }
-.m-code .kp { color: #ffffff; font-weight: bold }
-.m-code .kr { color: #ffffff; font-weight: bold }
-.m-code .kt { color: #ffffff; font-weight: bold }
-.m-code .m { color: #c7cf2f }
-.m-code .s { color: #e07f7c }
-.m-code .na { color: #dcdcdc; font-weight: bold }
-.m-code .nb { color: #ffffff; font-weight: bold }
-.m-code .nc { color: #dcdcdc; font-weight: bold }
-.m-code .no { color: #dcdcdc }
-.m-code .nd { color: #dcdcdc }
-.m-code .ni { color: #dcdcdc }
-.m-code .ne { color: #dcdcdc }
-.m-code .nf { color: #dcdcdc }
-.m-code .nl { color: #dcdcdc }
-.m-code .nn { color: #dcdcdc }
-.m-code .nx { color: #dcdcdc }
-.m-code .py { color: #dcdcdc }
-.m-code .nt { color: #dcdcdc; font-weight: bold }
-.m-code .nv { color: #c7cf2f }
-.m-code .ow { color: #dcdcdc; font-weight: bold }
-.m-code .mb { color: #c7cf2f }
-.m-code .mf { color: #c7cf2f }
-.m-code .mh { color: #c7cf2f }
-.m-code .mi { color: #c7cf2f }
-.m-code .mo { color: #c7cf2f }
-.m-code .sa { color: #e07f7c }
-.m-code .sb { color: #e07f7c }
-.m-code .sc { color: #e07cdc }
-.m-code .dl { color: #e07f7c }
-.m-code .sd { color: #e07f7c }
-.m-code .s2 { color: #e07f7c }
-.m-code .se { color: #e07f7c }
-.m-code .sh { color: #e07f7c }
-.m-code .si { color: #e07f7c }
-.m-code .sx { color: #e07f7c }
-.m-code .sr { color: #e07f7c }
-.m-code .s1 { color: #e07f7c }
-.m-code .ss { color: #e07f7c }
-.m-code .bp { color: #ffffff; font-weight: bold }
-.m-code .fm { color: #dcdcdc }
-.m-code .vc { color: #c7cf2f }
-.m-code .vg { color: #c7cf2f }
-.m-code .vi { color: #c7cf2f }
-.m-code .vm { color: #c7cf2f }
-.m-code .il { color: #c7cf2f }
+.codehilite .hll { background-color: #34424d }
+.codehilite  { background: #002200; color: #e7e9db }
+.codehilite .c { color: #a5c9ea }
+.codehilite .k { color: #ffffff; font-weight: bold }
+.codehilite .l { color: #f99b15 }
+.codehilite .n { color: #dcdcdc }
+.codehilite .o { color: #aaaaaa }
+.codehilite .p { color: #aaaaaa }
+.codehilite .ch { color: #a5c9ea }
+.codehilite .cm { color: #a5c9ea }
+.codehilite .cp { color: #3bd267 }
+.codehilite .cpf { color: #c7cf2f }
+.codehilite .c1 { color: #a5c9ea }
+.codehilite .cs { color: #a5c9ea }
+.codehilite .gd { color: #cd3431 }
+.codehilite .ge { color: #e6e6e6; font-style: italic }
+.codehilite .gh { color: #ffffff; font-weight: bold }
+.codehilite .gi { color: #3bd267 }
+.codehilite .gp { color: #776e71; font-weight: bold }
+.codehilite .gs { color: #e6e6e6; font-weight: bold }
+.codehilite .gu { color: #5b9dd9 }
+.codehilite .kc { color: #ffffff; font-weight: bold }
+.codehilite .kd { color: #ffffff; font-weight: bold }
+.codehilite .kn { color: #ffffff; font-weight: bold }
+.codehilite .kp { color: #ffffff; font-weight: bold }
+.codehilite .kr { color: #ffffff; font-weight: bold }
+.codehilite .kt { color: #ffffff; font-weight: bold }
+.codehilite .ld { color: #48b685 }
+.codehilite .m { color: #c7cf2f }
+.codehilite .s { color: #e07f7c }
+.codehilite .na { color: #dcdcdc; font-weight: bold }
+.codehilite .nb { color: #ffffff; font-weight: bold }
+.codehilite .nc { color: #dcdcdc; font-weight: bold }
+.codehilite .no { color: #dcdcdc }
+.codehilite .nd { color: #dcdcdc }
+.codehilite .ni { color: #dcdcdc }
+.codehilite .ne { color: #dcdcdc }
+.codehilite .nf { color: #dcdcdc }
+.codehilite .nl { color: #dcdcdc }
+.codehilite .nn { color: #dcdcdc }
+.codehilite .nx { color: #dcdcdc }
+.codehilite .py { color: #dcdcdc }
+.codehilite .nt { color: #dcdcdc; font-weight: bold }
+.codehilite .nv { color: #c7cf2f }
+.codehilite .ow { color: #dcdcdc; font-weight: bold }
+.codehilite .w { color: #e7e9db }
+.codehilite .mb { color: #c7cf2f }
+.codehilite .mf { color: #c7cf2f }
+.codehilite .mh { color: #c7cf2f }
+.codehilite .mi { color: #c7cf2f }
+.codehilite .mo { color: #c7cf2f }
+.codehilite .sa { color: #e07f7c }
+.codehilite .sb { color: #e07f7c }
+.codehilite .sc { color: #e07cdc }
+.codehilite .dl { color: #e07f7c }
+.codehilite .sd { color: #e07f7c }
+.codehilite .s2 { color: #e07f7c }
+.codehilite .se { color: #e07f7c }
+.codehilite .sh { color: #e07f7c }
+.codehilite .si { color: #e07f7c }
+.codehilite .sx { color: #e07f7c }
+.codehilite .sr { color: #e07f7c }
+.codehilite .s1 { color: #e07f7c }
+.codehilite .ss { color: #e07f7c }
+.codehilite .bp { color: #ffffff; font-weight: bold }
+.codehilite .fm { color: #dcdcdc }
+.codehilite .vc { color: #c7cf2f }
+.codehilite .vg { color: #c7cf2f }
+.codehilite .vi { color: #c7cf2f }
+.codehilite .vm { color: #c7cf2f }
+.codehilite .il { color: #c7cf2f }
 
 .m-console .hll { background-color: #ffffcc }
 .m-console .g-AnsiBlack { color: #232627 }

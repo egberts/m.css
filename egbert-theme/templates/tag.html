@@ -24,14 +24,14 @@
 {% endblock %}
 
 {% block content_title %}
-      <div class="m-info m-note">
-        Showing only posts tagged <em>{{ tag|e }}</em>. <a href="{{ M_BLOG_URL|format_siteurl|e }}">Show all posts.</a>
-      </div>
-      {% if tag.page and tag.page.content and articles_page.number == 1 %}
-      <div class="m-block m-info">
-        <h3>{% if tag.page.title %}{{ tag.page.title }}{% else %}{{ tag|e }}{% endif %}</h3>
-        {{ tag.page.content|rtrim|indent(8) }}
-      </div>
-      {% endif %}
+  <div class="m-info m-note">
+Showing only posts tagged <em>{{ tag|e }}</em>. <a href="{{ M_BLOG_URL|format_siteurl|e }}">Show all posts.</a>
+  </div>
+  {% if tag.page and tag.page.content and articles_page.number == 1 %}
+  <div class="m-block m-info">
+    <h3>{% if tag.page.title %}{{ tag.page.title }}{% else %}{{ tag|e }}{% endif %}</h3>
+{{ tag.page.content|rtrim|indent(8) }}
+  </div>
+  {% endif %}
 {% endblock %}
 <!-- tag.html ends -->
