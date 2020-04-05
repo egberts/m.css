@@ -368,7 +368,7 @@ ul ol, ul ul, ol ol, ol ul {
   margin-bottom: 0;
 }
 main p {
-  text-indent: 1.5rem;
+  text-indent: 0;
   text-align: justify;
 }
 main p.m-noindent, li > p, dd > p, table.m-table td > p {
@@ -427,6 +427,7 @@ pre, code {
   font-size: 1em;
   color: #5b5b5b;
   background-color: #fbf0ec;
+  border-radius: 0.2rem;
 }
 pre.m-console, code.m-console {
   color: #5b5b5b;
@@ -444,6 +445,7 @@ pre.m-console-wrap {
 }
 code {
   padding: 0.125rem;
+  border-radius: 0.3rem;
 }
 *:focus { outline-color: #ea7944; }
 div.m-scroll {
