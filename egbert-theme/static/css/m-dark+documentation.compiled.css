@@ -343,7 +343,7 @@ html {
   background-color: #000000;
 }
 body {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'FontAwesome', sans-serif;
   font-size: 1rem;
   line-height: normal;
   color: #ccffcc;
@@ -423,7 +423,7 @@ mark {
   color: #33ff33;
 }
 pre, code {
-  font-family: 'Source Code Pro', monospace, monospace, monospace;
+  font-family: 'FontAwesome', monospace, monospace, monospace;
   font-size: 0.9em;
   color: #e6ffe6;
   background-color: #003500;

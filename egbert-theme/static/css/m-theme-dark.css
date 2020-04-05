@@ -24,8 +24,10 @@
 
 :root {
   /* Text properties */
-  --font: 'Source Sans Pro', sans-serif;
-  --code-font: 'Source Code Pro', monospace;
+  /* --font: 'Source Sans Pro', sans-serif;
+  --code-font: 'Source Code Pro', monospace; */
+  --font: 'FontAwesome', sans-serif;
+  --code-font: 'FontAwesome', monospace; 
   --font-size: 16px;
   --code-font-size: 0.9em; /* *not* rem, so it follows surrounding font size */
   --line-height: normal;
