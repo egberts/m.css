@@ -46,7 +46,7 @@ h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
 }
 p, ul, ol, dl {
-  margin-top: 0;
+  margin-top: 1rem;
 }
 ul, ol {
   padding-left: 2rem;
@@ -128,7 +128,7 @@ pre.m-console, code.m-console {
   background-color: var(--console-background-color);
 }
 pre {
-  padding: 0.5rem 1rem;
+  padding: 1.5rem 1rem;
   border-radius: var(--border-radius);
   overflow-x: auto;
   margin-top: 0; /* stupid defaults */
@@ -139,7 +139,7 @@ pre.m-console-wrap {
 }
 code {
   padding: 0.125rem;
-  border-radius: 0.3rem;
+  border-radius: 0.4rem;
 }
 
 /* Focus outline on link, canvas and input: match the focused header item. */

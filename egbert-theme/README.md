@@ -5,8 +5,8 @@ To perform unit test of this Egbert theme, execute:
 
 To modify CSS files, recreate the master CSS file, execute:
 
-    cd egbert-theme/css
-    ./
+    cd egbert-theme/static/css
+    bash ./postprocess.sh
 
 To change color of Pygments lexer (code syntax hi-lighting):
 
