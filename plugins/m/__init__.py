@@ -24,3 +24,7 @@
 
 # This file is here only to make python unittest work, it's not needed
 # otherwise
+
+# __path__ = __import__('pkgutil').extend_path(__path__, __name__)
+
+__import__('pkg_resources').declare_namespace(__name__)
