@@ -1,4 +1,5 @@
 /* Generated using `./postprocess.py m-dark.css`. Do not edit. */
+/* File: m.css/pelican-theme/static/m-dark.compiled.css  */
 
 /*
     This file is part of m.css.
@@ -1728,6 +1729,7 @@ p, ul, ol, dl, blockquote, pre, .m-code-figure, .m-console-figure, hr, .m-note,
 img.m-image, svg.m-image, figure.m-figure, .m-imagegrid, div.m-math,
 div.m-graph, div.m-plot {
   margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 p:last-child, p.m-nopadb, ul:last-child, ul.m-nopadb,
 ol:last-child, ol.m-nopadb, dl:last-child, dl.m-nopadb,
