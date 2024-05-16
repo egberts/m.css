@@ -1,7 +1,8 @@
 #
 #   This file is part of m.css.
 #
-#   Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+#             Vladimír Vondruš <mosra@centrum.cz>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
 #   copy of this software and associated documentation files (the "Software"),
@@ -94,8 +95,22 @@ class AuthorList(BlogTestCase):
         })
 
         # Verify both right sidebar and bottom columns on jumbo articles. It's
-        # without tags, which is the third option to be considered there.
+        # without tags, which is tested in AuthorListTags below.
         self.assertEqual(*self.actual_expected_contents('index.html'))
+        self.assertEqual(*self.actual_expected_contents('article-jumbo.html'))
+
+class AuthorListTags(BlogTestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(__file__, 'author_list_tags', *args, **kwargs)
+
+    def test(self):
+        self.run_pelican({
+            'AUTHOR': "An Author",
+            'M_SHOW_AUTHOR_LIST': True
+        })
+
+        # Verify alignment of categories, tags and authors on the bottom of
+        # the jumbo article
         self.assertEqual(*self.actual_expected_contents('article-jumbo.html'))
 
 class FooterLinks(BlogTestCase):
@@ -158,7 +173,7 @@ class Pagination(BlogTestCase):
         })
 
         # Test the category pages as well (same as author/tag). Couldn't test
-        # that in the above test case because of the overriden pagination
+        # that in the above test case because of the overridden pagination
         # patterns.
         self.assertEqual(*self.actual_expected_contents('category-misc.html'))
         self.assertEqual(*self.actual_expected_contents('category-misc2.html'))

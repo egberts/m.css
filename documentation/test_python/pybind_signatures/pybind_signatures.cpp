@@ -45,6 +45,12 @@ struct MyClass23 {
     void setFooCrazy(const Crazy<3, int>&) {}
 };
 
+struct MyClass26 {
+    static int positionalOnly(int, float) { return 1; }
+    static int keywordOnly(float, const std::string&) { return 2; }
+    static int positionalKeywordOnly(int, float, const std::string&) { return 3; }
+};
+
 void duck(py::args, py::kwargs) {}
 
 template<class T, class U> void tenOverloads(T, U) {}
@@ -75,7 +81,21 @@ PYBIND11_MODULE(pybind_signatures, m) {
         .def("tenOverloads", &tenOverloads<float, bool>, "Ten overloads of a function")
         .def("tenOverloads", &tenOverloads<int, bool>, "Ten overloads of a function")
         .def("tenOverloads", &tenOverloads<bool, bool>, "Ten overloads of a function")
-        .def("tenOverloads", &tenOverloads<std::string, std::string>, "Ten overloads of a function");
+        .def("tenOverloads", &tenOverloads<std::string, std::string>, "Ten overloads of a function")
+
+        .def("full_docstring", &voidFunction, R"(A summary
+
+And a larger docstring as well.)")
+        .def("full_docstring_overloaded", &tenOverloads<int, int>, R"(An overload summary
+
+This function takes a value of 2. full_docstring_overloaded(a: float, b: float)
+takes just 3 instead.)")
+        .def("full_docstring_overloaded", &tenOverloads<float, float>, R"(Another overload summary
+
+This overload, however, takes just a 32-bit (or 64-bit) floating point value of
+3. full_docstring_overloaded(a: int, b: int)
+takes just 2. There's nothing for 4. full_docstring_overloaded(a: poo, b: foo)
+could be another, but it's not added yet.)");
 
     py::class_<MyClass>(m, "MyClass", "My fun class!")
         .def_static("static_function", &MyClass::staticFunction, "Static method with positional-only args")
@@ -102,5 +122,24 @@ PYBIND11_MODULE(pybind_signatures, m) {
     pybind23
         .def_property("writeonly", nullptr, &MyClass23::setFoo, "A write-only property")
         .def_property("writeonly_crazy", nullptr, &MyClass23::setFooCrazy, "A write-only property with a type that can't be parsed");
+    #endif
+
+    py::class_<MyClass26> pybind26{m, "MyClass26", "Testing pybind 2.6 features"};
+
+    /* Checker so the Python side can detect if testing pybind 2.6 features is
+       feasible */
+    pybind26.attr("is_pybind26") =
+        #if PYBIND11_VERSION_MAJOR*100 + PYBIND11_VERSION_MINOR >= 206
+        true
+        #else
+        false
+        #endif
+        ;
+
+    #if PYBIND11_VERSION_MAJOR*100 + PYBIND11_VERSION_MINOR >= 206
+    pybind26
+        .def_static("positional_only", &MyClass26::positionalOnly, "Positional-only arguments", py::arg("a"), py::pos_only{}, py::arg("b"))
+        .def_static("keyword_only", &MyClass26::keywordOnly, "Keyword-only arguments", py::arg("b"), py::kw_only{}, py::arg("keyword") = "no")
+        .def_static("positional_keyword_only", &MyClass26::positionalKeywordOnly, "Positional and keyword-only arguments", py::arg("a"), py::pos_only{}, py::arg("b"), py::kw_only{}, py::arg("keyword") = "no");
     #endif
 }

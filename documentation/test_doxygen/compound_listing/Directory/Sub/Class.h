@@ -56,7 +56,11 @@ class Class {
 
         void undocumented();
 
-        /*@}*/
+        /* Since 1.8.17, the original short-hand group closing doesn't work
+           anymore. FFS. */
+        /**
+         * @}
+         */
 
     protected:
         /** @brief A protected subclass */
@@ -85,13 +89,6 @@ class Class {
         /** @brief A protected variable */
         std::string logger;
 
-        /** @{ */ /* Group w/o a name */
-
-        /** @brief A member that gets ignored because the group has no name */
-        int member;
-
-        /*@}*/
-
         /** @{ @name Group full of non-public stuff which should be marked as such */
 
         /** @brief Protected flag in a group */
@@ -113,7 +110,11 @@ class Class {
         /** @brief Private non-virtual function in a group shouldn't appear in the docs */
         int doStuffIgnored();
 
-        /*@}*/
+        /* Since 1.8.17, the original short-hand group closing doesn't work
+           anymore. FFS. */
+        /**
+         * @}
+         */
 
         /** @brief This shouldn't appear in the docs */
         class Private {};
@@ -126,6 +127,20 @@ class Class {
 
         /** @brief This shouldn't appear in the docs */
         void foobar();
+};
+
+/** @brief A struct producing warnings */
+struct Warning {
+    /** @{ */ /* Group w/o a name */
+
+    /** @brief A member that gets ignored because the group has no name */
+    int member;
+
+    /* Since 1.8.17, the original short-hand group closing doesn't work
+        anymore. FFS. */
+    /**
+        * @}
+        */
 };
 
 /** @relatedalso Class

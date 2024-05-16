@@ -1,7 +1,36 @@
 #include <type_traits>
 
-/** @brief Pathological cases of noexcept */
+/** @brief Pathological cases of function attributes */
 struct Foo {
+    /**
+     * @brief Constexpr before static
+     *
+     * 1.8.18 puts both `constexpr` and `static` into the return type so I have
+     * to remove them. WHY! HOW IS THAT USEFUL IN ANY WAY?!
+     */
+    constexpr static int constexprStaticFunction();
+
+    /**
+     * @brief Consteval before static
+     *
+     * Same as above, but for C++20's consteval.
+     */
+    consteval static int constevalStaticFunction();
+
+    /**
+     * @brief Constexpr after static
+     *
+     * In this case, `static` is not in the return type. FFS.
+     */
+    static constexpr int staticConstexprFunction();
+
+    /**
+     * @brief Consteval after static
+     *
+     * Same as above, but for C++20's consteval.
+     */
+    static consteval int staticConstevalFunction();
+
     /**
      * @brief Combined default and noexcept
      *
@@ -71,7 +100,7 @@ class Base {
 /** @brief A derived class */
 class Derived: public Base {
     protected:
-        /** @brief Do a thing, overriden, now protected */
+        /** @brief Do a thing, overridden, now protected */
         void doThing() const noexcept(false) override;
 
     private:

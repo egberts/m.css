@@ -1,7 +1,8 @@
 ..
     This file is part of m.css.
 
-    Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+              Vladimír Vondruš <mosra@centrum.cz>
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -44,6 +45,8 @@ Python docs
     :language: js
 .. role:: py(code)
     :language: py
+.. role:: sh(code)
+    :language: sh
 .. role:: rst(code)
     :language: rst
 
@@ -77,7 +80,7 @@ into the ``documentation/`` directory:
 
 .. code:: sh
 
-    git clone git://github.com/mosra/m.css
+    git clone https://github.com/mosra/m.css
     cd m.css/documentation
 
 The script requires Python 3.6 and depends on `Jinja2 <http://jinja.pocoo.org/>`_
@@ -200,7 +203,7 @@ Variable                            Description
                                     put into the footer. If not set, a default
                                     generic text is used. If empty, no footer
                                     is rendered at all.
-:py:`FORMATTED_METADATA: List[str]` Which meatadata fields should be formatted
+:py:`FORMATTED_METADATA: List[str]` Which metadata fields should be formatted
                                     in documentation pages. By default only
                                     the ``summary`` field is.
 :py:`PLUGINS: List[str]`            List of `plugins <{filename}/plugins.rst>`_
@@ -237,6 +240,23 @@ Variable                            Description
                                     bandwidth and initial processing time. If
                                     not set, :py:`False` is used. See `Search options`_
                                     for more information.
+:py:`SEARCH_FILENAME_PREFIX: str`   Search data filename prefix. Useful to
+                                    prevent file conflicts if both C++ and
+                                    Python documentation shares the same
+                                    directory. If not set, ``searchdata`` is
+                                    used.
+:py:`SEARCH_RESULT_ID_BYTES: int`   Search data packing option. A value of
+                                    :py:`2`, :py:`3` or :py:`4` is allowed. If
+                                    not set, :py:`2` is used. See
+                                    `Search options`_ for more information.
+:py:`SEARCH_FILE_OFFSET_BYTES: int` Search data packing option. A value of
+                                    :py:`3` or :py:`4` is allowed. If not set,
+                                    :py:`3` is used. See `Search options`_ for
+                                    more information.
+:py:`SEARCH_NAME_SIZE_BYTES: int`   Search data packing option. A value of
+                                    :py:`1` or :py:`2` is allowed. If not set,
+                                    :py:`1` is used. See `Search options`_ for
+                                    more information.
 :py:`SEARCH_HELP: str`              :abbr:`reST <reStructuredText>` markup to
                                     display as help text on empty search popup.
                                     If not set, a default message is used. Has
@@ -390,6 +410,21 @@ search to a subdomain:
 
     SEARCH_EXTERNAL_URL = 'https://google.com/search?q=site:doc.magnum.graphics+{query}'
 
+The search binary is implicitly made with the tightest packing possible for
+smallest download sizes. On large projects with tens of thousands of symbols it
+may however happen that the data won't fit and doc generation fails with an
+exception such as the following, suggesting you to increase the packed type
+sizes:
+
+    OverflowError: Trie result ID too large to store in 16 bits, set
+    SEARCH_RESULT_ID_BYTES = 3 in your conf.py.
+
+The relevant `configuration`_ is :py:`SEARCH_RESULT_ID_BYTES`,
+:py:`SEARCH_FILE_OFFSET_BYTES` and :py:`SEARCH_NAME_SIZE_BYTES`. Simply update
+your ``conf.py`` with suggested values and restart the generator. Due to the
+way the search data get processed during serialization it's unfortunately not
+feasible to estimate the packing sizes beforehand.
+
 `Custom URL formatters`_
 ------------------------
 
@@ -456,49 +491,61 @@ below the parent package. If a module's :py:`__package__` is empty, it's
 assumed to be a plain module (instead of a package) and since those can't have
 submodules, all found submodules in it are ignored.
 
-.. block-success:: Overriding the set of included names, module reorganization
+`Documentation-only overrides`_
+-------------------------------
 
-    In case the autodetection includes more than you want or, conversely, you
-    need to include names that would otherwise be excluded (such as underscored
-    names), you can temporarily override the :py:`__all__` attribute when
-    generating the docs. For example, the following will list just the
-    :py:`pow()` and :py:`log()` funtions from the :py:`math` module, ignoring
-    the rest:
+While the inspection and autodetection follows the structure of the original
+code, it might not be always desirable to show it exactly that way in the docs.
+Fortunately, thanks to Python's dynamic nature, a lot can be done by
+`monkey-patching <https://en.wikipedia.org/wiki/Monkey_patch>`_ during doc
+generation.
 
-    .. code:: py
+In case the autodetection includes more than you want or, conversely, you need
+to include names that would otherwise be excluded (such as underscored names),
+you can temporarily override the :py:`__all__` attribute when generating the
+docs. For example, the following will list just the :py:`pow()` and :py:`log()`
+functions from the :py:`math` module, ignoring the rest:
 
-        import math
-        math.__all__ = ['pow', 'log']
+.. code:: py
 
-        INPUT_MODULES = [math]
+    import math
+    math.__all__ = ['pow', 'log']
 
-    In other cases, especially when native modules are involved, the inspected
-    name locations might not be what you want. By putting the names into
-    :py:`__all__` you tell the script it should map the inspected location to
-    the one provided. Note you should also hide the original location from the
-    script to avoid duplicate definitons (unless it's underscored, in which
-    case it'll get ignored automatically).
+    INPUT_MODULES = [math]
 
-    .. code:: py
+In other cases, especially when native modules are involved, the inspected name locations might not be what you want. By putting the names into :py:`__all__`
+you tell the script it should map the inspected location to the one provided.
+Note you should also hide the original location from the script to avoid
+duplicate definitions (unless it's underscored, in which case it'll get ignored
+automatically).
 
-        # module math
+.. code:: py
 
-        from _native_math import fast_sin as sin
-        from _native_math import fast_cos as cos
-        __all__ = ['sin', 'cos']
+    # module math
 
-    Additionally, for mapping types of external libraries where the
-    autodetection from :py:`__all__` can't be performed, you can use the
-    :py:`NAME_MAPPING` option:
+    from _native_math import fast_sin as sin
+    from _native_math import fast_cos as cos
+    __all__ = ['sin', 'cos']
 
-    .. code:: py
+Additionally, for mapping types of external libraries where the autodetection
+from :py:`__all__` can't be performed, you can use the :py:`NAME_MAPPING`
+option:
 
-        NAME_MAPPING = {
-            'fastmath._native.Vector3': 'fastmath.Vector3',
-            'fastmath._native.Quaternion': 'fastmath.Quaternion',
-            # or, equivalently, if the mapping is the same for all members:
-            'fastmath._native': 'fastmath'
-        }
+.. code:: py
+
+    NAME_MAPPING = {
+        'fastmath._native.Vector3': 'fastmath.Vector3',
+        'fastmath._native.Quaternion': 'fastmath.Quaternion',
+        # or, equivalently, if the mapping is the same for all members:
+        'fastmath._native': 'fastmath'
+    }
+
+.. block-warning:: Overrides based an environment variable
+
+    When m.css is run, an environment variable named
+    :sh:`$MCSS_GENERATING_OUTPUT` is set. This can be used for *really dirty*
+    hacks when monkey-patching imported modules is not enough (for example in
+    order to change behavior inside native modules).
 
 `Docstrings`_
 -------------
@@ -716,7 +763,7 @@ to :py:`OUTPUT` with the leading dirs stripped from the path.
 ==========
 
 The :abbr:`reST <reStructuredText>` content is not limited to just the builtin
-functionality and it's possible to extend it via plugins eiter
+functionality and it's possible to extend it via plugins either
 `from m.css itself <{filename}/plugins.rst>`_ or 3rd party ones. See
 documentation of each plugin to see its usage; the
 `m.htmlsanity <{filename}/plugins/htmlsanity.rst>`_ plugin is used
@@ -934,7 +981,7 @@ Keyword argument    Content
                     :py:`css_classes`   List of CSS classes to add to the
                                         :html:`<a>` tag. Internal entries
                                         usually have :py:`['m-doc']` while
-                                        exteral have :py:`['m-doc-external']`.
+                                        external have :py:`['m-doc-external']`.
                     =================== =======================================
 =================== ===========================================================
 

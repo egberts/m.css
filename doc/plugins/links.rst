@@ -1,7 +1,8 @@
 ..
     This file is part of m.css.
 
-    Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+              Vladimír Vondruš <mosra@centrum.cz>
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -293,23 +294,23 @@ and adding the :rst:`:class:` option.
         .. role:: dox-flat(dox)
             :class: m-flat
 
-        -   Function link: :dox:`Utility::Directory::mkpath()`
-        -   Class link: :dox:`Interconnect::Emitter`
-        -   Page link: :dox:`building-corrade`
+        -   Function link: :dox:`Utility::Path::make()`
+        -   Class link: :dox:`Containers::String`
+        -   Page link: :dox:`corrade-cmake`
         -   :dox:`Custom link title <testsuite>`
         -   :dox:`Link to documentation index page <corrade>`
-        -   :dox:`Link to an anchor <Interconnect::Emitter#pub-methods>`
+        -   :dox:`Link to an anchor <Containers::String#pub-methods>`
         -   Flat link: :dox-flat:`plugin-management`
 
     .. role:: dox-flat(dox)
         :class: m-flat
 
-    -   Function link: :dox:`Utility::Directory::mkpath()`
-    -   Class link: :dox:`Interconnect::Emitter`
-    -   Page link: :dox:`building-corrade`
+    -   Function link: :dox:`Utility::Path::make()`
+    -   Class link: :dox:`Containers::String`
+    -   Page link: :dox:`corrade-cmake`
     -   :dox:`Custom link title <testsuite>`
     -   :dox:`Link to documentation index page <corrade>`
-    -   :dox:`Link to an anchor <Interconnect::Emitter#pub-methods>`
+    -   :dox:`Link to an anchor <Containers::String#pub-methods>`
     -   Flat link: :dox-flat:`plugin-management`
 
 It's also possible to add custom CSS classes via a fourth tuple item. For

@@ -1,7 +1,8 @@
 #
 #   This file is part of m.css.
 #
-#   Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+#             Vladimír Vondruš <mosra@centrum.cz>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
 #   copy of this software and associated documentation files (the "Software"),
@@ -71,7 +72,7 @@ class Image(Directive):
                    'class': directives.class_option,
                    'target': directives.unchanged_required}
 
-    # Overriden by Figure
+    # Overridden by Figure
     image_class = 'm-image'
 
     def run(self):
@@ -109,8 +110,8 @@ class Image(Directive):
         if 'scale' in self.options:
             file = os.path.join(os.getcwd(), settings['INPUT'])
             absuri = os.path.join(file, reference.format(filename=file, static=file))
-            im = PIL.Image.open(absuri)
-            width = "{}px".format(int(im.width*self.options['scale']/100.0))
+            with PIL.Image.open(absuri) as im:
+                width = "{}px".format(int(im.width*self.options['scale']/100.0))
         elif 'width' in self.options:
             width = self.options['width']
         elif 'height' in self.options:
@@ -187,13 +188,21 @@ class Figure(Image):
             elif not (isinstance(first_node, nodes.comment)
                       and len(first_node) == 0):
                 error = self.state_machine.reporter.error(
-                      'Figure caption must be a paragraph or empty comment.',
+                      'Figure caption must be a paragraph or empty comment, got %s' % type(first_node),
                       nodes.literal_block(self.block_text, self.block_text),
                       line=self.lineno)
                 return [figure_node, error]
             if len(node) > 1:
                 figure_node += nodes.legend('', *node[1:])
         return [figure_node]
+
+# Adapter to accommodate breaking change in Pillow 7.2
+# https://pillow.readthedocs.io/en/stable/releasenotes/7.2.0.html#moved-to-imagefiledirectory-v2-in-image-exif
+def _to_numerator_denominator_tuple(ratio):
+    if isinstance(ratio, tuple):
+        return ratio
+    else:
+        return ratio.numerator, ratio.denominator
 
 class ImageGrid(rst.Directive):
     has_content = True
@@ -218,29 +227,30 @@ class ImageGrid(rst.Directive):
             # also prepend the absolute path in case we're not Pelican
             file = os.path.join(os.getcwd(), settings['INPUT'])
             absuri = os.path.join(file, uri.format(filename=file, static=file))
-            im = PIL.Image.open(absuri)
 
             # If no caption provided, get EXIF info, if it's there
-            if not caption and hasattr(im, '_getexif') and im._getexif() is not None:
-                exif = {
-                    PIL.ExifTags.TAGS[k]: v
-                    for k, v in im._getexif().items()
-                    if k in PIL.ExifTags.TAGS and len(str(v)) < 256
-                }
+            with PIL.Image.open(absuri) as im:
+                if not caption and hasattr(im, '_getexif') and im._getexif() is not None:
+                    exif = {
+                        PIL.ExifTags.TAGS[k]: v
+                        for k, v in im._getexif().items()
+                        if k in PIL.ExifTags.TAGS and len(str(v)) < 256
+                    }
 
-                # Not all info might be present
-                caption = []
-                if 'FNumber' in exif:
-                    caption += ["F{}".format(float(float(exif['FNumber'][0])/float(exif['FNumber'][1])))]
-                if 'ExposureTime' in exif:
-                    numerator, denominator = exif['ExposureTime']
-                    if int(numerator) > int(denominator):
-                        caption += ["{} s".format(float(numerator)/float(denominator))]
-                    else:
-                        caption += ["{}/{} s".format(numerator, denominator)]
-                if 'ISOSpeedRatings' in exif:
-                    caption += ["ISO {}".format(exif['ISOSpeedRatings'])]
-                caption = ', '.join(caption)
+                    # Not all info might be present
+                    caption = []
+                    if 'FNumber' in exif:
+                        numerator, denominator = _to_numerator_denominator_tuple(exif['FNumber'])
+                        caption += ["F{}".format(float(numerator)/float(denominator))]
+                    if 'ExposureTime' in exif:
+                        numerator, denominator = _to_numerator_denominator_tuple(exif['ExposureTime'])
+                        if int(numerator) > int(denominator):
+                            caption += ["{} s".format(float(numerator)/float(denominator))]
+                        else:
+                            caption += ["{}/{} s".format(numerator, denominator)]
+                    if 'ISOSpeedRatings' in exif:
+                        caption += ["ISO {}".format(exif['ISOSpeedRatings'])]
+                    caption = ', '.join(caption)
 
             # If the caption is `..`, it's meant to be explicitly disabled
             if caption == '..': caption = ''
@@ -300,6 +310,6 @@ def _pelican_configure(pelicanobj):
     register_mcss(mcss_settings=settings)
 
 def register(): # for Pelican
-    import pelican.signals
+    from pelican import signals
 
-    pelican.signals.initialized.connect(_pelican_configure)
+    signals.initialized.connect(_pelican_configure)

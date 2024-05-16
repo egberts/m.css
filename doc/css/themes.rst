@@ -1,7 +1,8 @@
 ..
     This file is part of m.css.
 
-    Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+    Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+              Vladimír Vondruš <mosra@centrum.cz>
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -122,8 +123,8 @@ together and it will create a ``*.compiled.css`` file in the same directory:
     cd css
     ./postprocess.py m-dark.css # Creates a m-dark.compiled.css file
 
-`Modifying the Pygments higlighting style`_
--------------------------------------------
+`Modifying the Pygments highlighting style`_
+--------------------------------------------
 
 If you want to modify the Pygments style, it's a bit more involved. You need to
 edit the ``*.py`` file instead of the ``*.css``:
@@ -136,10 +137,10 @@ then generate a CSS file out of it:
 
 .. code:: sh
 
-    sudo cp pygments-dark.py /usr/lib/python3.8/site-packages/pygments/styles/dark.py
+    sudo cp pygments-dark.py /usr/lib/python3.10/site-packages/pygments/styles/dark.py
     pygmentize -f html -S dark -a .m-code > pygments-dark.css
 
-    sudo cp pygments-console.py /usr/lib/python3.8/site-packages/pygments/styles/console.py
+    sudo cp pygments-console.py /usr/lib/python3.10/site-packages/pygments/styles/console.py
     pygmentize -f html -S console -a .m-console > pygments-console.css
 
 Alternatively, you can use any of the builtin styles --- pick the one you like

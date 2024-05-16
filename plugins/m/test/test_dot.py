@@ -1,7 +1,8 @@
 #
 #   This file is part of m.css.
 #
-#   Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+#             Vladimír Vondruš <mosra@centrum.cz>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
 #   copy of this software and associated documentation files (the "Software"),
@@ -37,22 +38,16 @@ class Dot(PelicanPluginTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(__file__, '', *args, **kwargs)
 
-    @unittest.skipUnless(LooseVersion(dot_version()) >= LooseVersion("2.40.1"),
-                         "Dot < 2.40.1 has a completely different output.")
     def test(self):
         self.run_pelican({
             'PLUGINS': ['m.htmlsanity', 'm.components', 'm.dot'],
             'M_DOT_FONT': 'DejaVu Sans'
         })
 
-        self.assertEqual(*self.actual_expected_contents('page.html'))
+        # Used to be >= 2.44.0, but 2.42.2 appears to have the same output
+        if LooseVersion(dot_version()) >= LooseVersion("2.42.2"):
+            file = 'page.html'
+        else:
+            file = 'page-240.html'
 
-    @unittest.skipUnless(LooseVersion(dot_version()) < LooseVersion("2.40.1"),
-                         "Dot < 2.40.1 has a completely different output.")
-    def test_238(self):
-        self.run_pelican({
-            'PLUGINS': ['m.htmlsanity', 'm.components', 'm.dot'],
-            'M_DOT_FONT': 'DejaVu Sans'
-        })
-
-        self.assertEqual(*self.actual_expected_contents('page.html', 'page-238.html'))
+        self.assertEqual(*self.actual_expected_contents('page.html', file))

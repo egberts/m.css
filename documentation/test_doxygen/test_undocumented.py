@@ -3,7 +3,8 @@
 #
 #   This file is part of m.css.
 #
-#   Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+#             Vladimír Vondruš <mosra@centrum.cz>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
 #   copy of this software and associated documentation files (the "Software"),
@@ -26,14 +27,11 @@
 
 import os
 
-from _search import search_data_header_struct, searchdata_filename
+from _search import Serializer, searchdata_filename
 
 from . import IntegrationTestCase
 
-class Test(IntegrationTestCase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(__file__, '', *args, **kwargs)
-
+class Undocumented(IntegrationTestCase):
     def test(self):
         self.run_doxygen(wildcard='*.xml')
 
@@ -54,7 +52,7 @@ class Test(IntegrationTestCase):
         # Test we have all symbols in search data. It's enough to assert the
         # count, it equal to symbol count in the header file
         # TODO: reuse the search data deserialization API once done
-        with open(os.path.join(self.path, 'html', searchdata_filename), 'rb') as f:
+        with open(os.path.join(self.path, 'html', searchdata_filename.format(search_filename_prefix='searchdata')), 'rb') as f:
             serialized = f.read()
-            magic, version, symbol_count, map_offset, type_map_offset = search_data_header_struct.unpack_from(serialized)
+            magic, version, type_data, symbol_count, map_offset, type_map_offset = Serializer.header_struct.unpack_from(serialized)
             self.assertEqual(symbol_count, 44)

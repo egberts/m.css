@@ -1,7 +1,9 @@
 #
 #   This file is part of m.css.
 #
-#   Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+#             Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2020 Sergei Izmailov <sergei.a.izmailov@gmail.com>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
 #   copy of this software and associated documentation files (the "Software"),
@@ -126,23 +128,114 @@ class Signature(unittest.TestCase):
                 ('**kwargs', None, None, None),
             ], None, None))
 
-    # https://github.com/pybind/pybind11/commit/0826b3c10607c8d96e1d89dc819c33af3799a7b8,
-    # released in 2.3.0. We want to support both, so test both.
-    def test_default_values_pybind22(self):
+    def test_keyword_positional_only(self):
         self.assertEqual(parse_pybind_signature(self.state, [],
-            'foo(a: float=1.0, b: str=\'hello\')'),
+            'foo(a: int, /, b: float, *, keyword: str)'),
             ('foo', '', [
-                ('a', 'float', 'float', '1.0'),
-                ('b', 'str', 'str', '\'hello\''),
+                ('a', 'int', 'int', None),
+                ('/', None, None, None),
+                ('b', 'float', 'float', None),
+                ('*', None, None, None),
+                ('keyword', 'str', 'str', None),
             ], None, None))
 
-    def test_default_values_pybind23(self):
+    def test_default_values(self):
         self.assertEqual(parse_pybind_signature(self.state, [],
             'foo(a: float = 1.0, b: str = \'hello\')'),
             ('foo', '', [
                 ('a', 'float', 'float', '1.0'),
                 ('b', 'str', 'str', '\'hello\''),
             ], None, None))
+
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: float = libA.foo(libB.goo(123), libB.bar + 13) + 2, b = 3)'),
+            ('foo', '', [
+                ('a', 'float', 'float', 'libA.foo(libB.goo(123), libB.bar + 13) + 2'),
+                ('b', None, None, '3'),
+            ], None, None))
+
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: Tuple[int, ...] = (1,("hello", \'world\'),3,4))'),
+            ('foo', '', [
+                ('a', 'typing.Tuple[int, ...]',
+                      'typing.Tuple[int, ...]',
+                 '(1,("hello", \'world\'),3,4)')
+            ], None, None))
+
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: str = [dict(key="A", value=\'B\')["key"][0], None][0])'),
+             ('foo', '', [
+                 ('a', 'str', 'str', '[dict(key="A", value=\'B\')["key"][0], None][0]')
+             ], None, None))
+
+        bad_signature = ('foo', '', [('…', None, None, None)], None, None)
+
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo(a: float = [0][)'), bad_signature)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo(a: float = ()'), bad_signature)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo(a: float = (()'), bad_signature)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo(a: float = ))'), bad_signature)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo(a: float = ])'), bad_signature)
+
+    # https://github.com/pybind/pybind11/pull/2126, extremely stupid and
+    # annoying but what can I do. Want to support both this and the original
+    # behavior in case they revert the insanity again, so test that both
+    # variants give the same output.
+    def test_default_enum_values_pybind26(self):
+        # Before the insane change
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: bar.Enum = Enum.FOO_BAR)'),
+            ('foo', '', [
+                ('a', 'bar.Enum', 'bar.Enum', 'Enum.FOO_BAR')
+            ], None, None))
+
+        # After the insane change
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: bar.Enum = <Enum.FOO_BAR: -13376>)'),
+            ('foo', '', [
+                ('a', 'bar.Enum', 'bar.Enum', 'Enum.FOO_BAR')
+            ], None, None))
+
+        # Nested
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: bar.Enum = (4, [<Enum.FOO_BAR: -13376>], <Enum.FIZZ_PISS: 1>))'),
+            ('foo', '', [
+                ('a', 'bar.Enum', 'bar.Enum', '(4, [Enum.FOO_BAR], Enum.FIZZ_PISS)')
+            ], None, None))
+
+        # This isn't really expected to happen but yeah it still treats it as
+        # an enum
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: Enum = <Enum_MISSING_DOT:>)'),
+            ('foo', '', [
+                ('a', 'Enum', 'Enum', 'Enum_MISSING_DOT')
+            ], None, None))
+
+        # This is how pybind prints various objects, should be passed as-is.
+        # It should not corrupt any parameters after.
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: FooBar = <FooBar object at 0xabcd>, b: int = 3)'),
+            ('foo', '', [
+                ('a', 'FooBar', 'FooBar', '<FooBar object at 0xabcd>'),
+                ('b', 'int', 'int', '3')
+            ], None, None))
+
+        # This is weird and so will be passed as-is.
+        self.assertEqual(parse_pybind_signature(self.state, [],
+            'foo(a: Enum = <Enum_MISSING_GT: -1)'),
+            ('foo', '', [
+                ('a', 'Enum', 'Enum', '<Enum_MISSING_GT: -1')
+            ], None, None))
+
+        # This will fail
+        bad_signature = ('foo', '', [('…', None, None, None)], None, None)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo(a: Enum = <Enum.CHARACTERS_AFTER: 17>a)'), bad_signature)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo(a: Enum = <Enum.CHARACTERS_AFTER: 89><)'), bad_signature)
+
+    def test_bad_return_type(self):
+        bad_signature = ('foo', '', [('…', None, None, None)], None, None)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo() -> List[[]'), bad_signature)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo() -> List]'), bad_signature)
+        self.assertEqual(parse_pybind_signature(self.state, [], 'foo() -> ::std::vector<int>'), bad_signature)
 
     def test_crazy_stuff(self):
         self.assertEqual(parse_pybind_signature(self.state, [],
@@ -216,6 +309,40 @@ class Signatures(BaseInspectTestCase):
         with self.assertRaises(TypeError):
             pybind_signatures.MyClass.another(self=a)
 
+    def test_explicit_positional_args(self):
+        sys.path.append(self.path)
+        import pybind_signatures
+
+        # Similar to above, but these functions have explicit py::pos_only and
+        # py::kw_only placeholders
+
+        if not pybind_signatures.MyClass26.is_pybind26:
+            self.skipTest("only on pybind 2.6+")
+
+        # The a: int argument is always before the / and thus shouldn't be
+        # callable with a keyword
+        self.assertEqual(pybind_signatures.MyClass26.positional_only(1, 3.0), 1)
+        self.assertEqual(pybind_signatures.MyClass26.positional_keyword_only(1, 3.0), 3)
+        with self.assertRaises(TypeError):
+            pybind_signatures.MyClass26.positional_only(a=1, b=3.0)
+        with self.assertRaises(TypeError):
+            pybind_signatures.MyClass26.positional_keyword_only(a=1, b=3.0)
+
+        # The b argument is always between / and * and thus should be callable
+        # both without (done above/below) and with
+        self.assertEqual(pybind_signatures.MyClass26.positional_only(1, b=3.0), 1)
+        self.assertEqual(pybind_signatures.MyClass26.keyword_only(b=3.0), 2)
+        self.assertEqual(pybind_signatures.MyClass26.positional_keyword_only(1, b=3.0), 3)
+
+        # The keyword: str argument is always after the / and thus shouldn't be
+        # callable without a keyword
+        self.assertEqual(pybind_signatures.MyClass26.keyword_only(3.0, keyword='yes'), 2)
+        self.assertEqual(pybind_signatures.MyClass26.positional_keyword_only(1, 3.0, keyword='yes'), 3)
+        with self.assertRaises(TypeError):
+            pybind_signatures.MyClass26.keyword_only(3.0, 'yes')
+        with self.assertRaises(TypeError):
+            pybind_signatures.MyClass26.positional_keyword_only(1, 3.0, 'yes')
+
     def test(self):
         sys.path.append(self.path)
         import pybind_signatures
@@ -227,10 +354,10 @@ class Signatures(BaseInspectTestCase):
         self.assertEqual(*self.actual_expected_contents('pybind_signatures.MyClass.html'))
         self.assertEqual(*self.actual_expected_contents('false_positives.html'))
 
-        sys.path.append(self.path)
-        import pybind_signatures
         if pybind_signatures.MyClass23.is_pybind23:
             self.assertEqual(*self.actual_expected_contents('pybind_signatures.MyClass23.html'))
+        if pybind_signatures.MyClass26.is_pybind26:
+            self.assertEqual(*self.actual_expected_contents('pybind_signatures.MyClass26.html'))
 
 class Enums(BaseInspectTestCase):
     def test(self):
@@ -292,3 +419,8 @@ class ExternalOverloadDocs(BaseInspectTestCase):
         })
         self.assertEqual(*self.actual_expected_contents('pybind_external_overload_docs.html'))
         self.assertEqual(*self.actual_expected_contents('pybind_external_overload_docs.Class.html'))
+
+        sys.path.append(self.path)
+        import pybind_external_overload_docs
+        if pybind_external_overload_docs.Class26.is_pybind26:
+            self.assertEqual(*self.actual_expected_contents('pybind_external_overload_docs.Class26.html'))

@@ -1,7 +1,8 @@
 #
 #   This file is part of m.css.
 #
-#   Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+#             Vladimír Vondruš <mosra@centrum.cz>
 #
 #   Loosely based on https://github.com/Nitron/pelican-alias,
 #   copyright © 2013 Christopher Williams
@@ -74,6 +75,6 @@ def register_mcss(**kwargs):
 def _pelican_get_generators(generators): return AliasGenerator
 
 def register(): # for Pelican
-    import pelican.signals
+    from pelican import signals
 
-    pelican.signals.get_generators.connect(_pelican_get_generators)
+    signals.get_generators.connect(_pelican_get_generators)

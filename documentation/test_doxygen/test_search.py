@@ -3,7 +3,8 @@
 #
 #   This file is part of m.css.
 #
-#   Copyright © 2017, 2018, 2019 Vladimír Vondruš <mosra@centrum.cz>
+#   Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023
+#             Vladimír Vondruš <mosra@centrum.cz>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
 #   copy of this software and associated documentation files (the "Software"),
@@ -34,17 +35,14 @@ from _search import pretty_print, searchdata_filename
 from test_doxygen import IntegrationTestCase
 
 class Search(IntegrationTestCase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(__file__, '', *args, **kwargs)
-
     def test(self):
         self.run_doxygen(index_pages=[], wildcard='*.xml')
 
-        with open(os.path.join(self.path, 'html', searchdata_filename), 'rb') as f:
+        with open(os.path.join(self.path, 'html', searchdata_filename.format(search_filename_prefix='secretblob')), 'rb') as f:
             serialized = f.read()
             search_data_pretty = pretty_print(serialized, entryTypeClass=EntryType)[0]
         #print(search_data_pretty)
-        self.assertEqual(len(serialized), 4836)
+        self.assertEqual(len(serialized), 4841)
         self.assertEqual(search_data_pretty, """
 53 symbols
 deprecated_macro [0]
@@ -228,18 +226,31 @@ union [59]
 (EntryType.VAR, CssClass.DEFAULT, 'var')
 """.strip())
 
-class SearchLongSuffixLength(IntegrationTestCase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(__file__, 'long_suffix_length', *args, **kwargs)
+    def test_byte_sizes(self):
+        for config, bytes, size in [
+            ('SEARCH_RESULT_ID_BYTES', 3, 4959),
+            ('SEARCH_RESULT_ID_BYTES', 4, 5077),
+            ('SEARCH_FILE_OFFSET_BYTES', 4, 5302),
+            ('SEARCH_NAME_SIZE_BYTES', 2, 4893)
+        ]:
+            with self.subTest(config=config, bytes=bytes, size=size):
+                self.run_doxygen(index_pages=[], wildcard='*.xml', config={
+                    config: bytes
+                })
 
+                with open(os.path.join(self.path, 'html', searchdata_filename.format(search_filename_prefix='secretblob')), 'rb') as f:
+                    serialized = f.read()
+                self.assertEqual(len(serialized), size)
+
+class LongSuffixLength(IntegrationTestCase):
     def test(self):
         self.run_doxygen(index_pages=[], wildcard='*.xml')
 
-        with open(os.path.join(self.path, 'html', searchdata_filename), 'rb') as f:
+        with open(os.path.join(self.path, 'html', searchdata_filename.format(search_filename_prefix='searchdata')), 'rb') as f:
             serialized = f.read()
             search_data_pretty = pretty_print(serialized, entryTypeClass=EntryType)[0]
         #print(search_data_pretty)
-        self.assertEqual(len(serialized), 473)
+        self.assertEqual(len(serialized), 478)
         # The parameters get cut off with an ellipsis
         self.assertEqual(search_data_pretty, """
 2 symbols
